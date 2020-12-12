@@ -1,0 +1,72 @@
+class Stone{
+  float xPositionInitial;
+  float yPositionInitial;
+  float xPosition;
+  float yPosition;
+  int size; //asume that the sides have the same size
+  
+  PImage stone;
+  
+  boolean overStone = false;
+  boolean locked = false;
+  boolean stoneMoved = false;
+  
+  float xPositionOld;
+  float yPositionOld;
+  
+  float xOffset = 0;
+  float yOffset = 0;
+  
+  boolean timerOn;
+
+  Timer timer;
+ 
+  Stone(float xPos, float yPos, int stoneSize){
+    stone = loadImage("white stone.png");
+    xPositionInitial = xPos;
+    yPositionInitial = yPos;
+    xPosition = xPos;
+    yPosition = yPos;
+    size = stoneSize;
+  }
+
+  void display(){
+    image(stone, xPosition, yPosition, size, size);
+  }
+
+  void update(){
+    if(mouseX > xPosition - size/2 && mouseX < xPosition + size/2 &&
+    mouseY > yPosition - size/2 && mouseY < yPosition + size/2){
+    overStone = true;
+    if(!locked){
+      tint(160);
+      }
+    }
+    else {
+      noTint();
+      overStone = false;
+    }
+  }
+
+  void interact(){
+    if(overStone && mousePressed){
+      locked = true;
+      xPositionOld = xPosition;
+      yPositionOld = yPosition;
+      xPosition = mouseX;
+      yPosition = mouseY;
+    }
+    else{
+     locked = false;
+    }
+
+    if(xPositionOld!=xPosition && yPositionOld != yPosition){
+      stoneMoved = true; 
+    }
+  }
+  void underWater(){
+    if(stoneMoved == true){
+      tint(255,127);
+    }  
+  }
+}
