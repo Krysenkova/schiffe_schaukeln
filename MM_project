@@ -1,0 +1,40 @@
+import processing.video.*;
+Movie water;
+Schiff schiff;
+Stone[] stones;
+
+void setup() {
+size(1900, 1000);
+
+ water = new Movie(this, "water.mp4");
+water.loop();
+schiff = new Schiff(800, 600);
+
+stones = new Stone[3];
+stones[0] = new Stone(30, 50, 100);
+stones[1] = new Stone(30, 400, 80);
+stones[2] = new Stone(30, 850, 60);
+
+}
+
+void draw(){
+if (water.available()){
+  water.read();
+}
+image(water, 150, 0, 1650, 1000);
+frameRate(5);
+
+fill(11,116,165);
+rect(0,0,150,1000);
+rect(1750,0,150,1000);
+
+schiff.display();
+
+for(int i = 0; i < stones.length; i++){
+  stones[i].display();
+   stones[i].interact();
+  stones[i].update();
+  stones[i].underWater();
+}
+
+}
