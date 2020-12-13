@@ -1,23 +1,25 @@
 class Timer{
-String time = "060";
+String time = "60";
 int t;
 int interval;
 float xPosition;
 float yPosition;
-
 Timer(float xPos, float yPos, int inter){
   xPosition = xPos;
   yPosition = yPos;
   interval = inter;
 }
 
-void count(){  
+boolean count(){  
     t = interval-int(millis()/1000);
-    time = nf(t , 3);
+    time = nf(t , 2);
     if(t == 0){
-      println("make stone visible");
+      println("stop the timer");
+      return false;
    }
    fill(120,0,43);
+   textSize(26);
    text(time, xPosition, yPosition);
+   return true;
 }
 }
