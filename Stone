@@ -17,56 +17,68 @@ class Stone{
   float xOffset = 0;
   float yOffset = 0;
   
-  boolean timerOn;
-
+  boolean timerOn = false;
+  boolean underWater = false;
+  
   Timer timer;
  
   Stone(float xPos, float yPos, int stoneSize){
     stone = loadImage("white stone.png");
     xPositionInitial = xPos;
     yPositionInitial = yPos;
-    xPosition = xPos;
-    yPosition = yPos;
-    size = stoneSize;
-  }
+  xPosition = xPositionOld= xPos;
+  yPosition = yPositionOld = yPos;
+  size = stoneSize;
+}
 
   void display(){
-    image(stone, xPosition, yPosition, size, size);
-  }
-
-  void update(){
-    if(mouseX > xPosition - size/2 && mouseX < xPosition + size/2 &&
-    mouseY > yPosition - size/2 && mouseY < yPosition + size/2){
-    overStone = true;
-    if(!locked){
-      tint(160);
-      }
+    if(underWater == true && timerOn == true){
+  tint(255,126);
+image(stone, xPosition, yPosition, size, size);
+timer = new Timer(xPositionInitial, yPositionInitial + size*2, 120);
+timerOn = timer.count();
     }
-    else {
+   
+    else{
+      noTint();
+  image(stone, xPosition, yPosition, size, size);}
+}
+
+void update()
+  {
+    if (mouseX > xPosition - size/2 && mouseX < xPosition + size/2 &&
+        mouseY > yPosition - size/2 && mouseY < yPosition + size/2)
+        {
+         overStone = true;
+         if (!locked)
+         {
+           tint(160);
+         }
+        }
+    else 
+    {
       noTint();
       overStone = false;
     }
   }
 
-  void interact(){
-    if(overStone && mousePressed){
-      locked = true;
-      xPositionOld = xPosition;
-      yPositionOld = yPosition;
-      xPosition = mouseX;
-      yPosition = mouseY;
-    }
-    else{
+void interact(){
+  if(overStone && mousePressed){
+     locked = true;
+     xPositionOld = xPosition;
+     yPositionOld = yPosition;
+     xPosition = mouseX;
+     yPosition = mouseY;
+}
+  else{
      locked = false;
-    }
+     }
 
-    if(xPositionOld!=xPosition && yPositionOld != yPosition){
-      stoneMoved = true; 
-    }
+  if(xPositionOld!=xPosition && yPositionOld != yPosition){
+     stoneMoved = true;
+     underWater = true; 
+     timerOn = true;
   }
-  void underWater(){
-    if(stoneMoved == true){
-      tint(255,127);
-    }  
-  }
+  
+}
 }
