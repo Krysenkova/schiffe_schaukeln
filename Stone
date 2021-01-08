@@ -1,84 +1,129 @@
-class Stone{
-  float xPositionInitial;
-  float yPositionInitial;
-  float xPosition;
-  float yPosition;
-  int size; //asume that the sides have the same size
-  
+class Stone {
+  Playfield p;
   PImage stone;
-  
+
   boolean overStone = false;
   boolean locked = false;
-  boolean stoneMoved = false;
-  
-  float xPositionOld;
-  float yPositionOld;
-  
-  float xOffset = 0;
-  float yOffset = 0;
-  
-  boolean timerOn = false;
-  boolean underWater = false;
-  
+  boolean stoneMoved;
+  float positionX;
+  float positionY;
+  float posXinitial;
+  float posYinitial;
+  float stoneXOld;
+  float stoneYOld;
+  int stoneSize;
+  float transparency=100;
+  boolean transparencyOn;
+  boolean fadedAway = false;
   Timer timer;
- 
-  Stone(float xPos, float yPos, int stoneSize){
-    stone = loadImage("white stone.png");
-    xPositionInitial = xPos;
-    yPositionInitial = yPos;
-  xPosition = xPositionOld= xPos;
-  yPosition = yPositionOld = yPos;
-  size = stoneSize;
-}
 
-  void display(){
-    if(underWater == true && timerOn == true){
-  tint(255,126);
-image(stone, xPosition, yPosition, size, size);
-timer = new Timer(xPositionInitial, yPositionInitial + size*2, 120);
-timerOn = timer.count();
+  Stone(float stoneXtemp, float stoneYtemp, 
+    int stoneSizeTemp, Playfield pf) {
+    stone = loadImage("stone.png");
+
+    p = pf;
+
+    positionX = stoneXtemp;
+    positionY = stoneYtemp;
+    stoneXOld = positionX;
+    stoneYOld = positionY;
+
+    posXinitial = stoneXtemp;
+    posYinitial = stoneYtemp;
+
+    imageMode(CENTER);
+    stoneSize = stoneSizeTemp;
+  }
+
+  void display() {
+    if (transparencyOn) {
+      tint(255, 100);
+      fadeAway();
     }
-   
-    else{
+    else if (fadedAway) {
+      setInitialPosition();
+    } else {
       noTint();
-  image(stone, xPosition, yPosition, size, size);}
-}
+    }
+    image(stone, 
+      positionX, positionY, 
+      stoneSize, stoneSize);
+  }
 
-void update()
-  {
-    if (mouseX > xPosition - size/2 && mouseX < xPosition + size/2 &&
-        mouseY > yPosition - size/2 && mouseY < yPosition + size/2)
-        {
-         overStone = true;
-         if (!locked)
-         {
-           tint(160);
-         }
-        }
-    else 
-    {
-      noTint();
+  void update() {
+    if (mouseX > positionX - stoneSize / 2 &&
+      mouseX < positionX + stoneSize / 2 &&
+      mouseY > positionY - stoneSize / 2 && 
+      mouseY < positionY + stoneSize / 2) {
+      overStone = true;
+      if (!locked&&!drag) {
+      }
+    } else {
+
       overStone = false;
     }
   }
 
-void interact(){
-  if(overStone && mousePressed){
-     locked = true;
-     xPositionOld = xPosition;
-     yPositionOld = yPosition;
-     xPosition = mouseX;
-     yPosition = mouseY;
-}
-  else{
-     locked = false;
-     }
-
-  if(xPositionOld!=xPosition && yPositionOld != yPosition){
-     stoneMoved = true;
-     underWater = true; 
-     timerOn = true;
+  void displayWithShadow() {
+    rectMode(CENTER);
+    noStroke();
+    fill(#083F48, 180);
+    rect(positionX + 10, positionY+10, stoneSize, stoneSize, 10);
+    display();
   }
-  
+
+  void initMove() {
+    if (drag)
+      return; 
+    if (overStone && mousePressed) {
+      locked = true;
+      drag=true;
+    } else {
+      locked = false;
+    }
+  }
+
+  void interact() {
+    if (drag&&locked) {
+      positionX = mouseX;
+      positionY = mouseY;
+      displayWithShadow();
+    }
+  }
+  boolean stoneMoved() {
+    return stoneMoved = (!overStone && !locked && positionX > stoneXOld + 100 && positionY > stoneYOld + 100);
+  }
+
+  void afterMove() {
+    if (!drag&&locked) {
+      transparencyOn=true; //doesn't work with the second drag
+      waves.add(new Waves(positionX, positionY, stoneSize*2));
+      locked = false;
+    }
+  }
+
+  void setInitialPosition() {
+    positionX = posXinitial;
+    positionY = posYinitial;
+    if (transparency < 255) { 
+      transparency += 0.20;
+    }
+    tint(255, transparency);
+    if (transparency>=255) {
+      fadedAway=false;
+    }
+  }
+
+  void fadeAway() {
+    if (transparency > 0) { 
+      transparency -= 0.20;
+     
+    }
+    tint(255, transparency);
+    if (transparency<=0) {
+      fadedAway=true;
+      transparencyOn=false;
+    }
+  }
 }
-}
+
