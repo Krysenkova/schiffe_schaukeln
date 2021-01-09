@@ -1,58 +1,56 @@
-class Ship{
+class Ship {
   PImage ship;
-  
+
   float shipX;
   float shipY;
   int shipWidth;
   int shipHeight;
-  
+
   float shipXSpeed;
   float shipYSpeed;
-  
+
   float hoverAmount;
   float maxHover;
   float minHover;
-  
-  Ship(int tempShipX, int tempShipY){
+
+  Ship(int tempShipX, int tempShipY) {
     shipX = tempShipX;
     shipY = tempShipY;
-    
+
     ship = loadImage("ship.png");
     imageMode(CENTER);
     shipWidth = 196;
     shipHeight = 116;
-    
+
     shipXSpeed = 0;
     shipYSpeed = 0;
-    
+
     hoverAmount = 0.2;
     maxHover = shipY + 5;
     minHover = shipY - 5;
   }
-  
-  void display(){
+
+  void display() {
     noTint();
     image(ship, shipX+shipXSpeed, shipY+shipYSpeed, shipWidth, shipHeight);
     hover();
   }
-  
-  void hover(){
-   shipY += hoverAmount;
-   if(shipY >= maxHover || shipY <= minHover){
-    hoverAmount *= -1; 
-   }
+
+  void hover() {
+    shipY += hoverAmount;
+    if (shipY >= maxHover || shipY <= minHover) {
+      hoverAmount *= -1;
+    }
   }
-  
- // void move (){
+
+  //void move () {
   //  float distance = dist(stone1.positionX, shipX, stone1.positionY, shipY); 
- //   if (stone1.stoneMoved() && distance >= 100){
- //     shipXSpeed = 50;
-  //    shipYSpeed = 50;
-  //    display();
-  //    System.out.println("Distance: " + distance);
-  //    System.out.println("shipXSpeed: " + shipXSpeed);
+  //  if (stone1.stoneMoved() && distance >= 100) {
+   //   shipXSpeed = 50;
+   //   shipYSpeed = 50;
+   //   display();
+      //    System.out.println("Distance: " + distance);
+      //    System.out.println("shipXSpeed: " + shipXSpeed);
  //   }
- //  }  
-  
-  
+ // }
 }
