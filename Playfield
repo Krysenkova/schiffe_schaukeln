@@ -8,8 +8,6 @@ Stone stone1, stone2, stone3;
 PImage img;
 
 boolean drag = false;
-boolean timerOn = false;
-boolean wavesStart = false;
 
 Ship ship;
 ArrayList<Waves> waves = new ArrayList<Waves>();
@@ -49,7 +47,7 @@ void draw() {
   stone3.interact();
   
   ship.display();
- // ship.move();
+  //ship.move();
  
 }
 
@@ -62,7 +60,6 @@ void mousePressed() {
 void movieEvent(Movie m){
   m.read();
 }
-
 
 void mouseReleased() {
   drag=false;
