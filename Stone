@@ -15,7 +15,8 @@ class Stone {
   float transparency=100;
   boolean transparencyOn;
   boolean fadedAway = false;
-  Timer timer;
+  boolean isMovable = true;
+
 
   Stone(float stoneXtemp, float stoneYtemp, 
     int stoneSizeTemp, Playfield pf) {
@@ -38,10 +39,15 @@ class Stone {
   void display() {
     if (transparencyOn) {
       tint(255, 100);
-      fadeAway();
-    }
-    else if (fadedAway) {
-      setInitialPosition();
+      if (!fadedAway) {
+        fadeAway();
+      }
+    } else if (fadedAway) {
+      appear();
+      if (transparency >=255) {
+        fadedAway=false;
+        transparency=100;
+      }
     } else {
       noTint();
     }
@@ -75,7 +81,7 @@ class Stone {
   void initMove() {
     if (drag)
       return; 
-    if (overStone && mousePressed) {
+    if (overStone && mousePressed&&isMovable) {
       locked = true;
       drag=true;
     } else {
@@ -94,9 +100,18 @@ class Stone {
     return stoneMoved = (!overStone && !locked && positionX > stoneXOld + 100 && positionY > stoneYOld + 100);
   }
 
+  boolean overShip() {
+    //TODO
+    return false;
+  }
+
   void afterMove() {
+    //  if (overShip()) {
+    //   setInitialPosition();
+    //    return;
+    // }
     if (!drag&&locked) {
-      transparencyOn=true; //doesn't work with the second drag
+      transparencyOn=true;
       waves.add(new Waves(positionX, positionY, stoneSize*2));
       locked = false;
     }
@@ -105,25 +120,36 @@ class Stone {
   void setInitialPosition() {
     positionX = posXinitial;
     positionY = posYinitial;
+  }
+
+  void appear() {
+    setInitialPosition();
     if (transparency < 255) { 
-      transparency += 0.20;
+      transparency += 0.2;
     }
     tint(255, transparency);
     if (transparency>=255) {
+      System.out.println("APPEARED HERE");
       fadedAway=false;
+      isMovable=true;
     }
   }
 
   void fadeAway() {
+    isMovable=false;
     if (transparency > 0) { 
       transparency -= 0.20;
-     
     }
     tint(255, transparency);
     if (transparency<=0) {
+      System.out.println("FADED HERE");
       fadedAway=true;
       transparencyOn=false;
     }
   }
 }
+
+//FOR TESTING
+// System.out.println("----display/fadedAway-----");
+// System.out.println("trOn: "+transparencyOn +" drag: "+ drag+ " locked: "+ locked + " fadedeAway: "+ fadedAway);
 
