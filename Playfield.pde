@@ -9,31 +9,34 @@ PImage img;
 
 boolean drag = false;
 
+float X;
+float Y;
 Ship ship;
 ArrayList<Waves> waves = new ArrayList<Waves>();
 
-void setup(){
+void setup() {
   size(800, 800);
-  water=new Movie(this,"Water.mp4");
+  water=new Movie(this, "Water.mp4");
   water.loop();
 
-  stone1=new Stone(70, 70, 100,this);
-  stone2=new Stone(180, 70, 80,this);
-  stone3=new Stone(270, 70, 60,this);
-  
+  stone1=new Stone(70, 70, 100, this);
+  stone2=new Stone(180, 70, 80, this);
+  stone3=new Stone(270, 70, 60, this);
+
   ship = new Ship(width/2, height/2);
 }
 
 void draw() {
   background(water); 
-  
-   Iterator<Waves> i = waves.iterator();
-  while(i.hasNext()){
-    if(!i.next().animation(water)){
-      i.remove(); }
+
+  Iterator<Waves> i = waves.iterator();
+  while (i.hasNext()) {
+    if (!i.next().animation(water)) {
+      i.remove();
     }
-    
-  
+  }
+
+
   stone1.display();
   stone2.display();
   stone3.display();
@@ -45,10 +48,9 @@ void draw() {
   stone1.interact();
   stone2.interact();
   stone3.interact();
-  
+
   ship.display();
-  //ship.move();
- 
+  ship.update();
 }
 
 void mousePressed() {
@@ -57,7 +59,7 @@ void mousePressed() {
   stone3.initMove();
 }
 
-void movieEvent(Movie m){
+void movieEvent(Movie m) {
   m.read();
 }
 
