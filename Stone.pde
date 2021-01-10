@@ -97,7 +97,7 @@ class Stone {
     }
   }
   boolean stoneMoved() {
-    return stoneMoved = (!overStone && !locked && positionX > stoneXOld + 100 && positionY > stoneYOld + 100);
+    return stoneMoved = (overStone&&!locked && positionX > stoneXOld + 100 && positionY > stoneYOld + 100);
   }
 
   boolean overShip() {
@@ -111,9 +111,12 @@ class Stone {
     //    return;
     // }
     if (!drag&&locked) {
+      X = positionX;
+      Y = positionY;
       transparencyOn=true;
       waves.add(new Waves(positionX, positionY, stoneSize*2));
       locked = false;
+      ship.move();
     }
   }
 
@@ -148,8 +151,3 @@ class Stone {
     }
   }
 }
-
-//FOR TESTING
-// System.out.println("----display/fadedAway-----");
-// System.out.println("trOn: "+transparencyOn +" drag: "+ drag+ " locked: "+ locked + " fadedeAway: "+ fadedAway);
-
