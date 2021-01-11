@@ -80,11 +80,8 @@ class Ship {
   }
 
   void move () {
-    float distance = dist(X, shipX+(shipWidth/4), Y, shipY+(shipHeight/4));
-    System.out.println("X: " + X + " Y: " + Y + "centX: " + (shipX+shipWidth)/2 + " centY: " + (shipY+shipHeight)/2);
-    System.out.println("dist: " + dist(X, shipX+(shipWidth/2), Y, shipY+(shipHeight/2)));
-
-    System.out.println("1StMoved: " + stone1.stoneMoved()+"2StMoved: " + stone2.stoneMoved()+"3StMoved: " + stone3.stoneMoved()+ "distance3:" +distance);
+    float distance = dist(X, shipX+(shipWidth/2), Y, shipY+(shipHeight/2));
+    //Check distance!!!
     if (stone1.stoneMoved() && distance <= 300) {
       stoneAcceleration=0.25;
       moveTime = 100;
