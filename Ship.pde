@@ -14,10 +14,11 @@ class Ship {
   float hoverAmount;
   float maxHover;
   float minHover;
-  
-float shipXMiddle;
-float shipYMiddle;
-float distance = dist(X, shipX+(shipWidth/2), Y, shipY+(shipHeight/2));
+
+  float shipXMiddle;
+  float shipYMiddle;
+
+
   Ship(int tempShipX, int tempShipY) {
     shipX = tempShipX;
     shipY = tempShipY;
@@ -29,11 +30,10 @@ float distance = dist(X, shipX+(shipWidth/2), Y, shipY+(shipHeight/2));
 
     shipXSpeed = 0;
     shipYSpeed = 0;
-   
+
     hoverAmount = 0.2;
     maxHover = shipY + 5;
     minHover = shipY - 5;
-    
   }
 
   void display() {
@@ -42,7 +42,8 @@ float distance = dist(X, shipX+(shipWidth/2), Y, shipY+(shipHeight/2));
     shipY += shipYSpeed;
     image(ship, shipX, shipY, shipWidth, shipHeight);
     hover();
-    
+
+    fill(255, 0);
   }
 
   void hover() {
@@ -79,10 +80,10 @@ float distance = dist(X, shipX+(shipWidth/2), Y, shipY+(shipHeight/2));
   }
 
   void move () {
+    float distance = dist(X, shipX+(shipWidth/4), Y, shipY+(shipHeight/4));
     System.out.println("X: " + X + " Y: " + Y + "centX: " + (shipX+shipWidth)/2 + " centY: " + (shipY+shipHeight)/2);
     System.out.println("dist: " + dist(X, shipX+(shipWidth/2), Y, shipY+(shipHeight/2)));
-      
-    
+
     System.out.println("1StMoved: " + stone1.stoneMoved()+"2StMoved: " + stone2.stoneMoved()+"3StMoved: " + stone3.stoneMoved()+ "distance3:" +distance);
     if (stone1.stoneMoved() && distance <= 300) {
       stoneAcceleration=0.25;
