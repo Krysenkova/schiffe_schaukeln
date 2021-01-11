@@ -8,12 +8,13 @@ Stone stone1, stone2, stone3;
 PImage img;
 
 boolean drag = false;
+boolean shipIsMovable = false;
 
 float X;
 float Y;
 Ship ship;
 ArrayList<Waves> waves = new ArrayList<Waves>();
-
+float stoneAcceleration;
 void setup() {
   size(800, 800);
   water=new Movie(this, "Water.mp4");
