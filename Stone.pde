@@ -55,7 +55,7 @@ class Stone {
   }
 
   void update() {
-    
+
     if (mouseX > positionX - stoneSize / 2 &&
       mouseX < positionX + stoneSize / 2 &&
       mouseY > positionY - stoneSize / 2 && 
@@ -64,7 +64,6 @@ class Stone {
       if (!locked&&!drag) {
       }
     } else {
-
       overStone = false;
     }
   }
@@ -100,16 +99,25 @@ class Stone {
   }
 
   boolean overShip() {
-    //TODO
+    System.out.println("X: " + ship.shipX + " Y: " + ship.shipY + " width: " + ship.shipWidth + " height: " + ship.shipHeight);
+    if (positionX+stoneSize >= ship.shipX && positionX <= ship.shipX +ship.shipWidth/2 &&
+      positionY + stoneSize >= ship.shipY+15 && positionY <= ship.shipY+15 + ship.shipHeight/2) {
+      return true;
+    }
     return false;
   }
 
   void afterMove() {
+    if(overShip()){
+      setInitialPosition();
+      locked = false;
+      return;
+    }
     if (!drag&&locked) {
-      X = mouseX;
-      Y = mouseY;
+      X = positionX;
+      Y = positionY;
       transparencyOn=true;
-      waves.add(new Waves(positionX, positionY, stoneSize*2));
+      waves.add(new Waves(positionX, positionY, stoneSize*2, new SoundFile(p, "plop.wav")));
       locked = false;
       ship.move();
     }
@@ -145,3 +153,4 @@ class Stone {
       transparencyOn=false;
     }
   }
+
