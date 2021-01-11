@@ -17,11 +17,9 @@ class Stone {
   boolean fadedAway = false;
   boolean isMovable = true;
 
-
   Stone(float stoneXtemp, float stoneYtemp, 
     int stoneSizeTemp, Playfield pf) {
     stone = loadImage("stone.png");
-
     p = pf;
 
     positionX = stoneXtemp;
@@ -57,6 +55,7 @@ class Stone {
   }
 
   void update() {
+    
     if (mouseX > positionX - stoneSize / 2 &&
       mouseX < positionX + stoneSize / 2 &&
       mouseY > positionY - stoneSize / 2 && 
@@ -106,13 +105,9 @@ class Stone {
   }
 
   void afterMove() {
-    //  if (overShip()) {
-    //   setInitialPosition();
-    //    return;
-    // }
     if (!drag&&locked) {
-      X = positionX;
-      Y = positionY;
+      X = mouseX;
+      Y = mouseY;
       transparencyOn=true;
       waves.add(new Waves(positionX, positionY, stoneSize*2));
       locked = false;
@@ -128,7 +123,7 @@ class Stone {
   void appear() {
     setInitialPosition();
     if (transparency < 255) { 
-      transparency += 0.2;
+      transparency += stoneAcceleration;
     }
     tint(255, transparency);
     if (transparency>=255) {
@@ -141,7 +136,7 @@ class Stone {
   void fadeAway() {
     isMovable=false;
     if (transparency > 0) { 
-      transparency -= 0.20;
+      transparency -= stoneAcceleration;
     }
     tint(255, transparency);
     if (transparency<=0) {
@@ -150,4 +145,3 @@ class Stone {
       transparencyOn=false;
     }
   }
-}
