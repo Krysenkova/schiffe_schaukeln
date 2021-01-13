@@ -106,6 +106,26 @@ class Stone {
     }
     return false;
   }
+  
+  boolean stoneOverStone() {
+    //first&second
+    if (stone1.positionX+stone1.stoneSize >= stone2.positionX && stone1.positionX <= stone2.positionX +stone2.stoneSize &&
+      stone1.positionY + stone1.stoneSize >= stone2.positionY && stone1.positionY <= stone2.positionY + stone2.stoneSize) {
+      return true;
+    }
+    //second&third
+    if (stone3.positionX+stone3.stoneSize >= stone2.positionX && stone3.positionX <= stone2.positionX +stone2.stoneSize &&
+      stone3.positionY + stone3.stoneSize >= stone2.positionY && stone3.positionY <= stone2.positionY + stone2.stoneSize) {
+      return true;
+    }
+    //third&first
+    if (stone3.positionX+stone3.stoneSize >= stone1.positionX && stone3.positionX <= stone1.positionX +stone1.stoneSize &&
+      stone3.positionY + stone3.stoneSize >= stone1.positionY && stone3.positionY <= stone1.positionY + stone1.stoneSize) {
+      return true;
+    }
+    return false;
+  }
+
 
   void afterMove() {
     if(overShip()){
@@ -114,6 +134,11 @@ class Stone {
       return;
     }
     if (!drag&&locked) {
+    if (stoneOverStone()) {
+        setInitialPosition();
+        locked=false;
+        return;
+      }
       X = positionX;
       Y = positionY;
       transparencyOn=true;
