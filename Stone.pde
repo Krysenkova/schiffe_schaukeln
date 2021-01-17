@@ -1,27 +1,35 @@
 class Stone {
-  Playfield p;
-  PImage stone;
-  boolean overStone = false;
-  boolean locked = false;
-  boolean stoneMoved;
-  int positionX;
-  int positionY;
-  int posXend;
-  int posYend;
-  int posXinitial;
-  int posYinitial;
-  int stoneXOld;
-  int stoneYOld;
-  int stoneSize;
-  float transparency=100;
-  boolean transparencyOn;
-  boolean fadedAway = false;
-  boolean isMovable = true;
-  boolean canChooseWeight = false;
-  int stoneMin = 20;
-  int stoneMax = 120;
-  int weight;
+  Playfield p;  //main playfield
+  PImage stone;  //image of the stone
+  boolean overStone = false; //value to determine if the cursor is over stone
+  boolean locked = false; //vale to determine if the stone locked or not
+  boolean stoneMoved; //value to determine if the stone was moved
+  int positionX; //current position of the stone on x-Axis
+  int positionY;  //current position of the stone on y-Axis
+  int posXinitial; //initial position of the stone on x-Axis
+  int posYinitial;  //initial position of the stone on y-Axis
+  int stoneXOld;  //position of the stone on x-Axis before it was moved
+  int stoneYOld;  //position of the stone on y-Axis before it was moved
+  int stoneSize;  //size of the stone
+  float transparency=100; //transparency value for stones in tint() 
+  boolean transparencyOn; //value to determine if the stone should be transparent or not
+  boolean fadedAway = false; //value to determin if the stne is still visible for user
+  boolean isMovable = true; //value to determine if the user can move stone
+  boolean canChooseWeight = false; //value to determine if the user can choose weight for the stone
+  int stoneMin = 20; //the minimum size of the stone that is permitted
+  int stoneMax = 120; //the maximum size of the stone that is permitted
+  int weight; // weight of the stone 
 
+
+  /**
+  *stone constructor to initialize image and other parameters
+  *
+  *@param stoneXtemp
+  *@param  stoneYtemp
+  *@param size
+  *@param weight
+  *@param Playfield
+  **/
   Stone(int stoneXtemp, int stoneYtemp, int size, int weight, 
     Playfield pf) {
     stone = loadImage("stone1.png");
@@ -35,6 +43,9 @@ class Stone {
     stoneSize = size;
   }
 
+/**
+ *lets user create a stone by mouse movement
+ **/
   void create() {
     System.out.println("" + isResizable+isResized+mousePressed);
     System.out.println(""+isResizable + isResized+mousePressed);
