@@ -33,29 +33,27 @@ void draw() {
   background(water); 
 
   bowl.display();
-  
-  //Iterator<Waves> i = waves.iterator();
-  //while (i.hasNext()) {
-  //  if (!i.next().animation(water)) {
-  //    i.remove();
-  //  }
-  //}
 
-  //ConcurrentModificationException sometimes
-  for (Stone s : stones) {
-    s.display();
-    s.update();
-    s.interact();
+  Iterator<Waves> i = waves.iterator();
+  while (i.hasNext()) {
+    if (!i.next().animation(water)) {
+      i.remove();
+    }
   }
 
+  for (int s = 0; s < stones.size(); s++) {
+    stones.get(s).display();
+    stones.get(s).update();
+    if (stones.size()>0) {
+      stones.get(s).interact();
+    }
+  }
   ship.display();
   ship.update();
 }
 
 void mousePressed() {
-  System.out.println(""+ bowl.inBowl()+canCreateNewStone);
   if (bowl.inBowl()&&canCreateNewStone) {
-    System.out.println("I AM HERE");
     Stone temp = new Stone(130, 130, 0, 0, this);
     stones.add(temp);
     isResizable=true;
@@ -74,13 +72,13 @@ void movieEvent(Movie m) {
 void mouseReleased() {
   isResizable = false;
   drag=false;
-  for (Stone s : stones) {
-    s.afterMove();
+  for (int s = 0; s <= stones.size() - 1; s++) {
+    stones.get(s).afterMove();
   }
 }
-
+//controls if the keyboard keys were typed and calls a methode to set weight for a stone
 void keyPressed() {
-  for (Stone s : stones) {
-    s.chooseWeight();
+  for (int s = 0; s <= stones.size() - 1; s++) {
+    stones.get(s).chooseWeight();
   }
 }
