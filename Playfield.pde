@@ -1,63 +1,54 @@
+import processing.sound.*;
 import processing.video.*;
 import java.util.List;
 import java.util.Iterator;
 Movie water;
 
-Stone stone1, stone2, stone3;
+ArrayList<Stone> stones = new ArrayList<Stone>();
+Stone stone;
 
-PImage img;
-
+//Bowl bowl;
 boolean drag = false;
-boolean shipIsMovable = false;
-
+boolean isResizable = true;
+boolean isResized = false;
+boolean canCreateNewStone = false;
+float stoneAcceleration;
 float X;
 float Y;
+int stoneSize;
+int stoneIndex;
 Ship ship;
-ArrayList<Waves> waves = new ArrayList<Waves>();
-float stoneAcceleration;
+//ArrayList<Waves> waves = new ArrayList<Waves>();
+
 void setup() {
   size(800, 800);
   water=new Movie(this, "Water.mp4");
   water.loop();
-
-  stone1=new Stone(70, 70, 100, this);
-  stone2=new Stone(180, 70, 80, this);
-  stone3=new Stone(270, 70, 60, this);
-
+  stones.add(stone = new Stone(65, 65, 0, 0, this));
+  //bowl = new Bowl(0, 0);
   ship = new Ship(width/2, height/2);
 }
 
 void draw() {
   background(water); 
-
-  Iterator<Waves> i = waves.iterator();
-  while (i.hasNext()) {
-    if (!i.next().animation(water)) {
-      i.remove();
-    }
-  }
-
-
-  stone1.display();
-  stone2.display();
-  stone3.display();
-
-  stone1.update();
-  stone2.update();
-  stone3.update();
-
-  stone1.interact();
-  stone2.interact();
-  stone3.interact();
+  //  bowl.display();
+  //Iterator<Waves> i = waves.iterator();
+  //while (i.hasNext()) {
+  //  if (!i.next().animation(water)) {
+  //    i.remove();
+  //  }
+  //}
+  stone.display();
+  stone.update();
+  stone.interact();
 
   ship.display();
   ship.update();
 }
 
 void mousePressed() {
-  stone1.initMove();
-  stone2.initMove();
-  stone3.initMove();
+  stone.chooseWeight();
+  stone.initMove();
 }
 
 void movieEvent(Movie m) {
@@ -65,8 +56,14 @@ void movieEvent(Movie m) {
 }
 
 void mouseReleased() {
+  isResizable = false;
   drag=false;
-  stone1.afterMove();
-  stone2.afterMove();
-  stone3.afterMove();
+  stone.afterMove();
+  if (canCreateNewStone) {
+    stones.add(new Stone(65, 65, 0, 0, this));
+  }
+
+}
+void keyPressed() {
+  stone.chooseWeight();
 }
