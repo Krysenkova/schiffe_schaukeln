@@ -1,7 +1,6 @@
 class Stone {
   Playfield p;
   PImage stone;
-
   boolean overStone = false;
   boolean locked = false;
   boolean stoneMoved;
@@ -25,51 +24,55 @@ class Stone {
 
   Stone(int stoneXtemp, int stoneYtemp, int size, int weight, 
     Playfield pf) {
-    stone = loadImage("stone.png");
+    stone = loadImage("stone1.png");
     p = pf;
     positionX = stoneXtemp;
     positionY = stoneYtemp;
     this.weight = weight;
-
     posXinitial = stoneXtemp;
     posYinitial = stoneYtemp;
-
-    //imageMode(CENTER);
-
+    imageMode(CENTER);
     stoneSize = size;
   }
+
   void create() {
     System.out.println("" + isResizable+isResized+mousePressed);
     System.out.println(""+isResizable + isResized+mousePressed);
-    stoneSize = mouseX;
-    checkStoneSize(mouseX);
-    isResized=true;
-    canChooseWeight=true;
-    noTint();
+    if (isMovable) {
+      stoneSize = mouseX;
+      checkStoneSize(mouseX);
+      isResized=true;
+      canChooseWeight=true;
+      noTint();
+    }
   }
 
+  boolean isResizable() {
+    return isResizable&&bowl.inBowl();
+  }
 
   void display() {
-    //System.out.println("weight:" + weight);
-    if (isResizable&&mousePressed) {
+    if (isResizable()&&mousePressed) {
       create();
     }
-    //sets transparency if the stone is in water
     if (transparencyOn) {
+      //sets transparency when the stone is in water
       tint(255, 100);
       if (!fadedAway) {
         fadeAway();
       }
-    } else {
-      //Changes color of stones when the weight is chosen. Play with colors!!!
+    } 
+    if (!transparencyOn) {
+      //sets color when the weight is chosen
       if (weight==10) {
         tint(0, 0, 200);
       } else if (weight==20) {
         tint(0, 0, 225);
       } else if (weight==30) {
         tint(0, 0, 255);
-      } else
+      } else {
         noTint();
+      }
     }
     image(stone, 
       positionX, positionY, 
@@ -82,14 +85,21 @@ class Stone {
       mouseY > positionY - stoneSize / 2 && 
       mouseY < positionY + stoneSize / 2 &&isResized) {
       overStone = true;
-      if (!locked&&!drag) {
-      }
     } else {
       overStone = false;
     }
+    //removes stone from the playfield when it faded away
+    if (stones.size()>=2) {
+      for (int i = stones.size()-1; i >=0; i--) {
+        if (stones.get(i).fadedAway) {
+          stones.remove(i);
+        }
+      }
+    }
   }
   void chooseWeight() {
-  //sets stone weight by pressing keys 1,2,3. 1 - light, 2 - medium, 3 - heavy. Only accessable once after the stone is resized
+    canCreateNewStone=false;
+    //allows user to choose wieght for a stone by pressing keybord keys: 1 - light, 2 - medium, 3 - heavy
     if (canChooseWeight && !isResizable && keyPressed) {
       if (key == '1') {
         weight = 10;
@@ -103,6 +113,7 @@ class Stone {
     }
   }
   void displayWithShadow() {
+    rectMode(CENTER);
     noStroke();
     fill(#083F48, 180);
     rect(positionX + 10, positionY+10, stoneSize, stoneSize, 10);
@@ -110,12 +121,13 @@ class Stone {
   }
 
   void initMove() {
-  //doest let user move stone before it was resized and the stone weight was chosen
+
     if (drag||!isResized||canChooseWeight) {
+      //doesn't let throw a stone that is not yet resized or without weight
       return;
     }
-     //initializes the move
     if (overStone && mousePressed&&isMovable) {
+      //initializes move
       locked = true;
       drag=true;
     } else {
@@ -123,7 +135,8 @@ class Stone {
     }
   }
 
-  void interact() {
+  //changes position of the stone
+  void interact() { 
     if (drag&&locked&&isResized) {
       tint(230);
       positionX = mouseX;
@@ -132,6 +145,7 @@ class Stone {
     } else
       noTint();
   }
+
   boolean stoneMoved() {
     return stoneMoved = (overStone&&!locked && positionX > stoneXOld + 100 && positionY > stoneYOld + 100);
   }
@@ -182,12 +196,11 @@ class Stone {
     //}
     canCreateNewStone = true;
     transparencyOn=true;
-    // waves.add(new Waves(positionX, positionY, stoneSize*2, new SoundFile(p, "plop.wav")));
+    //waves.add(new Waves(positionX, positionY, stoneSize*2, new SoundFile(p, "plop.wav")));
     locked = false;
     X = positionX;
     Y = positionY;
     ship.move();
-
     // }
   }
 
@@ -200,39 +213,29 @@ class Stone {
       stoneSize = stoneMax;
     }
   }
- 
+
   void setInitialPosition() {
     positionX = posXinitial;
     positionY = posYinitial;
   }
 
-  //void appear() {
-  //  setInitialPosition();
-  //  if (transparency < 255) { 
-  //    transparency += stoneAcceleration;
-  //  }
-  //  tint(255, transparency);
-  //  if (transparency>=255) {
-  //    System.out.println("APPEARED HERE");
-  //    fadedAway=false;
-  //    isMovable=true;
-  //  }
-  //}
-
+  //gradualy changes the transparency of the stone till it dissapears
   void fadeAway() {
+    System.out.println("In Fade Away");
     isMovable=false;
     if (transparency > 0) { 
-      transparency -= stoneAcceleration;
+      transparency -= 0.5;
     }
     tint(255, transparency);
     if (transparency<=0) {
       System.out.println("FADED HERE");
       fadedAway=true;
-      //transparencyOn=false;
+      transparencyOn=false;
     }
   }
 
   int getSize() {
-    return stone.width;
+    return stoneSize;
   }
 }
+
