@@ -7,7 +7,7 @@ Movie water;
 ArrayList<Stone> stones = new ArrayList<Stone>();
 Stone stone;
 
-//Bowl bowl;
+Bowl bowl;
 boolean drag = false;
 boolean isResizable = true;
 boolean isResized = false;
@@ -18,37 +18,53 @@ float Y;
 int stoneSize;
 int stoneIndex;
 Ship ship;
-//ArrayList<Waves> waves = new ArrayList<Waves>();
+ArrayList<Waves> waves = new ArrayList<Waves>();
 
 void setup() {
   size(800, 800);
   water=new Movie(this, "Water.mp4");
   water.loop();
-  stones.add(stone = new Stone(65, 65, 0, 0, this));
-  //bowl = new Bowl(0, 0);
+  stones.add(stone = new Stone(130, 130, 0, 0, this));
+  bowl = new Bowl(130, 130);
   ship = new Ship(width/2, height/2);
 }
 
 void draw() {
   background(water); 
-  //  bowl.display();
+
+  bowl.display();
+  
   //Iterator<Waves> i = waves.iterator();
   //while (i.hasNext()) {
   //  if (!i.next().animation(water)) {
   //    i.remove();
   //  }
   //}
-  stone.display();
-  stone.update();
-  stone.interact();
+
+  //ConcurrentModificationException sometimes
+  for (Stone s : stones) {
+    s.display();
+    s.update();
+    s.interact();
+  }
 
   ship.display();
   ship.update();
 }
 
 void mousePressed() {
-  stone.chooseWeight();
-  stone.initMove();
+  System.out.println(""+ bowl.inBowl()+canCreateNewStone);
+  if (bowl.inBowl()&&canCreateNewStone) {
+    System.out.println("I AM HERE");
+    Stone temp = new Stone(130, 130, 0, 0, this);
+    stones.add(temp);
+    isResizable=true;
+    return;
+  }
+  for (Stone s : stones) {
+    s.chooseWeight();
+    s.initMove();
+  }
 }
 
 void movieEvent(Movie m) {
@@ -58,12 +74,13 @@ void movieEvent(Movie m) {
 void mouseReleased() {
   isResizable = false;
   drag=false;
-  stone.afterMove();
-  if (canCreateNewStone) {
-    stones.add(new Stone(65, 65, 0, 0, this));
+  for (Stone s : stones) {
+    s.afterMove();
   }
-
 }
+
 void keyPressed() {
-  stone.chooseWeight();
+  for (Stone s : stones) {
+    s.chooseWeight();
+  }
 }
