@@ -59,6 +59,7 @@ class Stone {
       //sets transparency when the stone is in water
       tint(255, 100);
       if (!fadedAway) {
+
         fadeAway();
       }
     } 
@@ -89,11 +90,9 @@ class Stone {
       overStone = false;
     }
     //removes stone from the playfield when it faded away
-    if (stones.size()>=2) {
-      for (int i = stones.size()-1; i >=0; i--) {
-        if (stones.get(i).fadedAway) {
-          stones.remove(i);
-        }
+    for (int i = stones.size()-1; i >= 0; i--) {
+      if (stones.get(i).fadedAway) {
+        stones.remove(i);
       }
     }
   }
@@ -123,7 +122,7 @@ class Stone {
   void initMove() {
 
     if (drag||!isResized||canChooseWeight) {
-      //doesn't let throw a stone that is not yet resized or without weight
+      //doesn't let user throw a stone that is not yet resized or without weight
       return;
     }
     if (overStone && mousePressed&&isMovable) {
@@ -187,21 +186,21 @@ class Stone {
     //    locked = false;
     //   return;
     // }
-
-    //if (!drag&&locked) {
-    //  //  if (stoneOverStone()) {
-    //  setInitialPosition();
-    //  locked=false;
-    //  return;
-    //}
-    canCreateNewStone = true;
-    transparencyOn=true;
-    //waves.add(new Waves(positionX, positionY, stoneSize*2, new SoundFile(p, "plop.wav")));
-    locked = false;
-    X = positionX;
-    Y = positionY;
-    ship.move();
-    // }
+    
+    if (!drag&&locked) {
+      //  //  if (stoneOverStone()) {
+      //  setInitialPosition();
+      //  locked=false;
+      //  return;
+      //}
+      canCreateNewStone = true;
+      waves.add(new Waves(positionX, positionY, stoneSize*2, new SoundFile(p, "plop.wav")));
+      transparencyOn=true;
+      locked = false;
+      X = positionX;
+      Y = positionY;
+      ship.move();
+    }
   }
 
   void checkStoneSize(int mouseX) {
@@ -213,7 +212,7 @@ class Stone {
       stoneSize = stoneMax;
     }
   }
-
+  
   void setInitialPosition() {
     positionX = posXinitial;
     positionY = posYinitial;
@@ -230,7 +229,6 @@ class Stone {
     if (transparency<=0) {
       System.out.println("FADED HERE");
       fadedAway=true;
-      transparencyOn=false;
     }
   }
 
